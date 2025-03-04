@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-
-public class SnakeGame  extends JPanel{
+public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
     private class Tile {
         int x;
         int y;
@@ -26,6 +25,10 @@ public class SnakeGame  extends JPanel{
     Tile food;
     Random random;
 
+    //GAME LOGIC
+    Timer  gameLoop;
+    int velocityX;
+    int velocityY;
 
     SnakeGame(int boardWidth, int boardHeight) {
         this.boardWidth = boardWidth;
@@ -38,6 +41,12 @@ public class SnakeGame  extends JPanel{
         food = new Tile(10, 10);
         random = new Random();
         placeFood();
+
+        velocityX = 0;
+        velocityY = 0;
+
+        gameLoop = new Timer(100, this);
+        gameLoop.start();
 
     }
 
@@ -63,5 +72,35 @@ public class SnakeGame  extends JPanel{
     public void placeFood() {
         food.x = random.nextInt(boardWidth/tileSize);//600/25 = 24
         food.y = random.nextInt(boardHeight/tileSize);
+    }
+
+    public void move() {
+        //SNAKE HEAD
+        snakeHead.x += velocityX;
+        snakeHead.y += velocityY;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        move();
+        repaint();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 }
