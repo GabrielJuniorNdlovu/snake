@@ -35,6 +35,8 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
         this.boardHeight = boardWidth;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
         setBackground(Color.black);
+        addKeyListener(this);
+        setFocusable(true);
 
         snakeHead = new Tile(5, 5);
 
@@ -87,20 +89,32 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            velocityX = 0;
+            velocityY = -1;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            velocityX = 0;
+            velocityY = 1;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            velocityX = -1;
+            velocityY = 0;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            velocityX = 1;
+            velocityY = 0;
+        }
+
     }
 
+
+    //Do not need these
+
     @Override
-    public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
-    }
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }
