@@ -20,6 +20,7 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
 
     //SNAKE
     Tile snakeHead; 
+    ArrayList<Tile> snakeBody;
 
     //FOOD
     Tile food;
@@ -39,6 +40,8 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
         setFocusable(true);
 
         snakeHead = new Tile(5, 5);
+        snakeBody = new ArrayList<Tile>();
+
 
         food = new Tile(10, 10);
         random = new Random();
@@ -74,6 +77,10 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
     public void placeFood() {
         food.x = random.nextInt(boardWidth/tileSize);//600/25 = 24
         food.y = random.nextInt(boardHeight/tileSize);
+    }
+
+    public boolean collision(Tile tile1, Tile tile2) {
+        return tile1.x == tile2.x && tile1.y == tile2.y;
     }
 
     public void move() {
