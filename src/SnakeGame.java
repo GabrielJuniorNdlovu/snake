@@ -30,6 +30,7 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
     Timer  gameLoop;
     int velocityX;
     int velocityY;
+    boolean gameOver = false;
 
     SnakeGame(int boardWidth, int boardHeight) {
         this.boardWidth = boardWidth;
@@ -69,9 +70,27 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
          //FOOD
          g.setColor(Color.red);
          g.fillRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize);
-        //SNAKE
+        
+         //SNAKE HEAD
         g.setColor(Color.green);
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
+
+        //SNAKE BODY
+        for (int i = 0; i < snakeBody.size(); i++) {
+            Tile snakePart = snakeBody.get(i);
+            g.fillRect(snakePart.x * tileSize, snakePart.y * tileSize, tileSize, tileSize);
+        }
+
+
+        //SCORE
+        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        if (gameOver) {
+            g.setColor(Color.red);
+            g.drawString("GAME OVER " + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
+        }
+        else {
+            g.drawString("Score: " + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
+        }
     }
 
     public void placeFood() {
@@ -86,20 +105,47 @@ public class SnakeGame  extends JPanel implements ActionListener, KeyListener{
     public void move() {
         //EAT FOOD
         if (collision(snakeHead, food)) {
-            snakeBody.add(new Tile(snakeHead.x, snakeHead.y));
+            snakeBody.add(new Tile(food.x, food.y));
             placeFood();
         }
 
+        //MOVE SNAKE BODY
+        for (int i = snakeBody.size() - 1; i >= 0; i--) {
+            Tile snakePart = snakeBody.get(i);
+            if (i == 0) {
+                snakePart.x = snakeHead.x;
+                snakePart.y = snakeHead.y;
+            } else {
+               Tile previousPart = snakeBody.get(i - 1);
+               snakePart.x = previousPart.x;
+               snakePart.y = previousPart.y;}
+            }
 
         //SNAKE HEAD
         snakeHead.x += velocityX;
         snakeHead.y += velocityY;
+
+        //GAME OVER CONDITIONS
+        for (int i = 0; i < snakeBody.size(); i++) {
+            Tile snakePart = snakeBody.get(i);
+            //COLLISION WITH SNAKE BODY
+            if (collision(snakeHead, snakePart)) {
+                gameOver = true;
+            }
+        }
+
+        if (snakeHead.x*tileSize < 0 || snakeHead.x*tileSize > boardWidth || snakeHead.y*tileSize < 0 || snakeHead.y*tileSize > boardHeight) {
+            gameOver = true;
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
         repaint();
+        if (gameOver) {
+            gameLoop.stop();
+        }
     }
 
     @Override
